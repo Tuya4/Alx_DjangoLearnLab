@@ -19,6 +19,14 @@ library.books.add(book)
 librarian = Librarian(name='Madam Pince', library=library)
 librarian.save()
 
+# Query all books in a specific library
+library_name = 'Main'
+library = Library.objects.get(name=library_name)
+books = library.books.all()
+print(f'Books in the library {library_name} library:')
+for book in books:
+    print(book.title)
+
 # Query all books in the library
 books = library.books.all()
 print('Books in the library:')
@@ -27,15 +35,10 @@ for book in books:
 
 # Query the librarian of the library
 librarian = library.librarian
-print(f'Librarian of the library: {librarian.name}')
+print(f'Librarian of the {library_name} library: {librarian.name}')
 
 # Query the author of the book
 author = book.author
 
 print(f'Author of the book: {author.name}')
-# Output:
-# Books in the library:
-# Harry Potter
-# Librarian of the library: Madam Pince
-# Author of the book: J.K. Rowling
 
