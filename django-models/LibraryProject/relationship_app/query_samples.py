@@ -1,52 +1,21 @@
-import django
-from django.conf import settings
-from django.core.management import execute_from_command_line
 from relationship_app.models import Author, Book, Library, Librarian
 
-settings.configure(
-    DEBUG=True,
-    INSTALLED_APPS=[
-        'relationship_app',
-        'django.contrib.contenttypes',
-        'django.contrib.auth',
-        'django.contrib.sessions',
-        'django.contrib.messages',
-        'django.contrib.staticfiles',
-    ],
-    DATABASES={
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bookshelf',
-            'USER': 'root',
-            'PASSWORD': 'Bazenga@3314',
-            'HOST': 'localhost',
-            'PORT': '3306',
-        }
-    },
-)
-django.setup()
-
-def query_all_books_by_author(author_name):
+def get_books_by_author(author_name):
     author = Author.objects.get(name=author_name)
-    books = author.books.all()
-    for book in books:
-        print(f'Book Title: {book.title}')
+    return Book.objects.filter(author=author)
 
-def list_all_books_in_library(library_name):
+def get_books_in_library(library_name):
     library = Library.objects.get(name=library_name)
-    books = library.books.all()
-    for book in books:
-        print(f'Book Title: {book.title}')
+    return library.books.all()
 
-def retrieve_librarian_for_library(library_name):
+def get_librarian_of_library(library_name):
     library = Library.objects.get(name=library_name)
-    librarian = library.librarian
-    print(f'Librarian Name: {librarian.name}')
+    return Librarian.objects.get(library=library)
 
 if __name__ == '__main__':
-    query_all_books_by_author('George Orwell')
-    list_all_books_in_library('Central Library')
-    retrieve_librarian_for_library('Central Library')
+    get_books_by_author('George Orwell')
+    get_books_in_library('Central Library')
+    get_librarian_of_library('Central Library')
 
 # def query_books_by_author(author_name):
 #     books = Book.objects.filter(author_name=author_name)
