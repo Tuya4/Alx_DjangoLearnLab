@@ -27,6 +27,14 @@ print(f'Books in the library {library_name} library:')
 for book in books:
     print(book.title)
 
+# Query all books by a specific author
+author_name = 'J.K. Rowling'
+author = Author.objects.get(name=author_name)
+books = author.book_set.all()
+print(f'Books by {author_name}:')
+for book in books:
+    print(book.title)    
+
 # Query all books in the library
 books = library.books.all()
 print('Books in the library:')
