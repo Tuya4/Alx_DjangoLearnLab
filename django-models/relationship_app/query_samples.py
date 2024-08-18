@@ -23,7 +23,7 @@ librarian.save()
 library_name = 'Main'
 library = Library.objects.get(name=library_name)
 books = library.books.all()
-print(f'Books in the library {library_name} library:')
+print(f'Books in the {library_name} library:')
 for book in books:
     print(book.title)
 
@@ -42,7 +42,7 @@ for book in books:
     print(book.title)
 
 # Query the librarian of the library
-librarian = library.librarian
+librarian = Librarian.objects.get(library=library)
 print(f'Librarian of the {library_name} library: {librarian.name}')
 
 # Query the author of the book
