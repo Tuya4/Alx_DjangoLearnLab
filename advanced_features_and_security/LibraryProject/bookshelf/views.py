@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import permission_required
 from .models import Book
 from django.http import HttpResponseForbidden
+from .forms import ExampleForm
 
 # Create your views here.
 from bookshelf.models import Book
@@ -56,3 +57,7 @@ def search_books(request):
     query = request.GET.get('query')
     books = Book.objects.filter(title__icontains=query)
     return render(request, 'bookshelf/book_list.html', {'books': books})
+
+def some_view(request):
+    form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
