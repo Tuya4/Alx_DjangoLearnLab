@@ -25,6 +25,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ['id', 'name', 'books']
 
+    
     def to_representation(self, instance): 
         representation =  super().to_representation(instance)  
         representation['books'] = BookSerializer(instance.books.all(), many=True).data
