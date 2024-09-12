@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Book, Author
-from datetime import datetime
+from datetime import date
 
 # Serializer for the Book model, converting Book instances to and from JSON format.
 class BookSerializer(serializers.ModelSerializer):
@@ -9,7 +9,7 @@ class BookSerializer(serializers.ModelSerializer):
         fields = ['title', 'publication_year', 'author']
 
     def validate_publication_year(self, value):
-        if value > datetime.date.today().year:
+        if value > date.today().year:
             raise serializers.ValidationError("Publication year cannot be in the future.")
         return value
     # Ensures publication_year is not in the future.
