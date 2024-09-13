@@ -36,3 +36,11 @@
 ## Customizations
 
 - **Custom Validation**: Ensures that `publication_year` is not in the future.
+
+# Filtering: Use query parameters like /books/?title=SomeTitle to filter by title
+
+# Searching: Use /books/?search=SomeAuthor to search by title or author
+
+# Ordering: Use /books/?ordering=publication_year to order by publication year (asc)
+
+# To order by descending, prefix the field with "-", e.g., /books/?ordering=-publication_year
