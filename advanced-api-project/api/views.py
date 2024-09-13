@@ -3,15 +3,16 @@ from rest_framework import generics, status
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
+# List all books or create a new one
 class BookListView(generics.ListCreateAPIView):
     
     # Retrieve a list of all books or create a new book.
     
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [AllowAny] # Public access to list and create books
+    permission_classes = [IsAuthenticatedOrReadOnly] # Public access for list, authenticated for create
 
     def post(self, request, *args, **kwargs):
          
@@ -30,10 +31,30 @@ class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
     
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can update or delete
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Authenticated for update/delete, public for read
 
     def put(self, request, *args, **kwargs):
         
-        # Handle the update of an existing book with custom logic.
+        # Handle the update of an existing book.
         
         return super().put(request, *args, **kwargs)
+
+# Create a new book
+class BookCreateView(generics.CreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can create
+
+
+# Update an existing book
+class BookUpdateView(generics.UpdateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can update
+
+
+# Delete a book
+class BookDeleteView(generics.DestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can delete
