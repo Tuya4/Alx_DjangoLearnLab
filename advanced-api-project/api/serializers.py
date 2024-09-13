@@ -6,7 +6,7 @@ from datetime import date
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ['title', 'publication_year', 'author']
+        fields = ['id', 'title', 'publication_year', 'author']
 
     def validate_publication_year(self, value):
         if value > date.today().year:
