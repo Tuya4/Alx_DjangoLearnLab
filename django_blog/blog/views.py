@@ -36,44 +36,52 @@ def home_view(request):
 def posts_view(request):
     return render(request, 'blog/posts.html')
 
+# View to list all blog posts
 class PostListView(ListView):
-    model = Post
-    template_name = 'blog/post_list.html'
-    context_object_name = 'posts'
-    ordering = ['-published_date']  # Order by the newest posts
+    model = Post  # Specify the model to be used
+    template_name = 'blog/post_list.html'  # Template to render the list
+    context_object_name = 'posts'  # Name for the list in the template
+    ordering = ['-published_date']  # Order posts by newest first
 
+# View to display a single blog post in detail
 class PostDetailView(DetailView):
-    model = Post
-    template_name = 'blog/post_detail.html'
-    
+    model = Post  # Specify the model to be used
+    template_name = 'blog/post_detail.html'  # Template to render the detail view
+
+# View to create a new blog post, requires the user to be logged in
 class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'blog/post_form.html'
+    model = Post  # Specify the model to be used
+    form_class = PostForm  # Use a custom form for the Post model
+    template_name = 'blog/post_form.html'  # Template for the form
 
+    # Automatically set the author of the post to the current logged-in user
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+# View to update an existing blog post, requires the user to be logged in and the author of the post
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'blog/post_form.html'
+    model = Post  # Specify the model to be used
+    form_class = PostForm  # Use a custom form for the Post model
+    template_name = 'blog/post_form.html'  # Template for the form
 
+    # Automatically set the author of the post to the current logged-in user
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+    # Check if the current user is the author of the post before allowing updates
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
 
+# View to delete an existing blog post, requires the user to be logged in and the author of the post
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Post
-    template_name = 'blog/post_confirm_delete.html'
-    success_url = reverse_lazy('post-list')
+    model = Post  # Specify the model to be used
+    template_name = 'blog/post_confirm_delete.html'  # Template to confirm deletion
+    success_url = reverse_lazy('post-list')  # Redirect to post list after successful deletion
 
+    # Check if the current user is the author of the post before allowing deletion
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
-    
