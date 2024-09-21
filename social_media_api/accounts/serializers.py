@@ -5,7 +5,7 @@ from .models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
     # define password as CharField to ensure proper validation
-    password = serializers.CharField(write_only=True, min_length=8)
+    password = serializers.CharField(write_only=True, min_length=8, max_length=15)
     
     class Meta:
         model = CustomUser
