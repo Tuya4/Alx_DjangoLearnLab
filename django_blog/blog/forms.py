@@ -21,6 +21,10 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'tags']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Enter title'}),
+            'content': forms.Textarea(attrs={'placeholder': 'Enter content'}),
+        }
 
 class CommentForm(forms.ModelForm):
     class Meta:
