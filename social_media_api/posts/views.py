@@ -4,10 +4,7 @@ from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from notifications.models import Notification
-from django.contrib.contenttypes.models import ContentType
 from rest_framework import generics, status
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
