@@ -148,3 +148,18 @@ Authorization: Token <your_token>
 ```
 
 ---
+
+### User Follows and Feed Functionality
+
+1. **Follow a User:**
+   URL: /accounts/follow/<user_id>/
+   Method: POST
+   Description: Follow a user by their ID.
+2. **Unfollow a User:**
+   URL: /accounts/unfollow/<user_id>/
+   Method: POST
+   Description: Unfollow a user by their ID.
+3. **View User Feed:**
+   URL: /posts/feed/
+   Method: GET
+   Description: View posts from users you follow, ordered by the most recent.
