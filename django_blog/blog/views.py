@@ -5,7 +5,7 @@ from .forms import CustomUserCreationForm, UserUpdateForm, PostForm, CommentForm
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .models import Post, Comment, Tag
+from .models import Post, Comment
 from django.db.models import Q
 
 # Registration View
@@ -58,6 +58,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     # Automatically set the author of the post to the current logged-in user
     def form_valid(self, form):
         form.instance.author = self.request.user
+        tags = form.cleaned_data.get('tags')
         return super().form_valid(form)
 
 # View to update an existing blog post, requires the user to be logged in and the author of the post
@@ -69,6 +70,7 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     # Automatically set the author of the post to the current logged-in user
     def form_valid(self, form):
         form.instance.author = self.request.user
+        tags = form.cleaned_data.get('tags')
         return super().form_valid(form)
 
     # Check if the current user is the author of the post before allowing updates
@@ -140,6 +142,5 @@ def search_posts(request):
     return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})             
 
 def tagged_posts(request, tag_name):
-    tag = Tag.objects.get(name=tag_name)
-    posts = tag.posts.all()
-    return render(request, 'blog/tagged_posts.html', {'posts': posts, 'tag': tag})
+    posts = Post.objects.filter(tags__name__in=[tag_name])  # Get posts by tag
+    return render(request, 'blog/tagged_posts.html', {'posts': posts, 'tag': tag_name})
