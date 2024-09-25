@@ -1,12 +1,11 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from .models import Notification
 
-@login_required
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Requires user to be authenticated
 def unread_notifications(request):
     notifications = Notification.objects.filter(recipient=request.user, read=False)
     data = [{'actor': n.actor.username, 'verb': n.verb, 'target': str(n.target), 'timestamp': n.timestamp} for n in notifications]
-    return JsonResponse(data, safe=False)
-
-# Create your views here.
+    return Response(data)

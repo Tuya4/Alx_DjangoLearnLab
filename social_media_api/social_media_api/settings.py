@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import django_heroku
+import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_#(x#&h%z-kp8y@zc&njjvuk4#@w5@w2u1$854s$@vs%boy*&5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['your-heroku-app-name.herokuapp.com']
 
 
 # Application definition
@@ -80,8 +83,12 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'social_media_api_db',
+        'USER': 'root',
+        'PASSWORD': 'Bazenga@3314',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -142,3 +149,8 @@ REST_FRAMEWORK = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+django_heroku.settings(locals())
+
+DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+

@@ -7,6 +7,9 @@ This project is a Social Media API built using Django and Django REST Framework.
 - User registration and login with token-based authentication.
 - Custom user model with additional fields like `bio`, `profile_picture`, and `followers`.
 - Token-based authentication using Django REST Framework’s Token Authentication.
+- Post creation, editing, and deletion.
+- User follow and feed functionality.
+- Real-time notifications for user interactions (likes, follows, comments).
 
 ---
 
@@ -16,6 +19,7 @@ This project is a Social Media API built using Django and Django REST Framework.
 
 - Django REST Framework
 - Postman (for testing the API)
+- Heroku (for deployment to production)
 
 ### Installation Steps
 
@@ -25,6 +29,8 @@ This project is a Social Media API built using Django and Django REST Framework.
    pip install django djangorestframework
    django-admin startproject social_media_api
    python manage.py startapp accounts
+   python manage.py startapp posts
+   python manage.py startapp notifications
    ```
 
 2. **Set up the Django project**:
@@ -149,6 +155,74 @@ Authorization: Token <your_token>
 
 ---
 
+### Posts Functionality
+
+The posts app allows users to create, edit, delete posts, and view feeds of posts from users they follow.
+
+1. **Create a New Post**:
+   **Endpoint**: `/api2/posts/create/`
+
+   **Method**: `POST`
+
+   **Request Body**:
+
+   ```json
+   {
+   	"content": "This is my first post!",
+   	"image": "optional_image_url"
+   }
+   ```
+
+   **\*Response**:
+
+   ```json
+   {
+   	"id": 1,
+   	"content": "This is my first post!",
+   	"image": "optional_image_url",
+   	"author": "testuser",
+   	"created_at": "2024-09-26T12:34:56Z"
+   }
+   ```
+
+2. **View User Feed**
+
+   **Endpoint**: `/api2/posts/feed/`
+   **Method**: `GET`
+   **Description**: `Displays posts from users the logged-in user follows, ordered by most recent.`
+
+3. **Edit a Post**
+
+   **Endpoint**: `/api2/posts/<post_id>/edit/`
+
+   **Method**: `PATCH`
+
+   **Request Body**:
+
+   ```json
+   {
+   	"content": "Updated post content"
+   }
+   ```
+
+   **Response**:
+
+   ```json
+   {
+   	"id": 1,
+   	"content": "Updated post content",
+   	"image": "optional_image_url",
+   	"author": "testuser",
+   	"updated_at": "2024-09-26T12:40:00Z"
+   }
+   ```
+
+4. **Delete a Post**
+
+   **Endpoint**: `/api2/posts/<post_id>/delete/`
+   **Method**: `DELETE`
+   **Description**: `Deletes the specified post.`
+
 ### User Follows and Feed Functionality
 
 1. **Follow a User:**
@@ -163,3 +237,53 @@ Authorization: Token <your_token>
    URL: /posts/feed/
    Method: GET
    Description: View posts from users you follow, ordered by the most recent.
+
+### Notifications Functionality
+
+The notifications app tracks user interactions like follows, likes, and comments, and notifies users accordingly.
+
+1. **Get All Notifications**
+
+   **Endpoint**: `/api2/notifications/`
+   **Method**: `GET`
+   **Description**: `Returns a list of notifications for the logged-in user.`
+
+   **Response**:
+
+   ```json
+   [
+   	{
+   		"id": 1,
+   		"recipient": "testuser",
+   		"message": "user1 liked your post.",
+   		"timestamp": "2024-09-26T13:00:00Z",
+   		"read": false
+   	},
+   	{
+   		"id": 2,
+   		"recipient": "testuser",
+   		"message": "user2 followed you.",
+   		"timestamp": "2024-09-26T13:05:00Z",
+   		"read": false
+   	}
+   ]
+   ```
+
+2. **Mark Notification as Read**
+
+   **Endpoint**: `/api2/notifications/<notification_id>/ read/`
+   **Method**: `PATCH`
+
+   **Description**: `Marks the specified notification as read.`
+
+   **Response**:
+
+   ```json
+   {
+   	"id": 1,
+   	"recipient": "testuser",
+   	"message": "user1 liked your post.",
+   	"timestamp": "2024-09-26T13:00:00Z",
+   	"read": true
+   }
+   ```
