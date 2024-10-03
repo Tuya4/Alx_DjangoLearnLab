@@ -83,7 +83,14 @@ WSGI_APPLICATION = 'social_media_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres:bazenga%403314@localhost:5432/social_media_api_db')
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'task_management_api_db',
+        'USER': 'root',
+        'PASSWORD': 'Bazenga@3314',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
 }
 
 
